@@ -1,7 +1,5 @@
 package com.dejami.test;
 
-import com.dejami.test.util.SystemUiHider;
-
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.os.Build;
@@ -10,17 +8,9 @@ import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
 
-/**
- * The login screen for DejaMi test app. Started with an Android template.
- * Some of the comments (suuch as the following paragraph) are from the template.
- * 
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
- * 
- * @see SystemUiHider
- */
+import com.dejami.test.util.SystemUiHider;
 
-public class LoginActivity extends Activity {
+public class GalleryActivity extends Activity {
 	/**
 	 * Whether or not the system UI should be auto-hidden after
 	 * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -53,7 +43,7 @@ public class LoginActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.activity_login);
+		setContentView(R.layout.activity_gallery);
 
 		final View controlsView = findViewById(R.id.fullscreen_content_controls);
 		final View contentView = findViewById(R.id.fullscreen_content);

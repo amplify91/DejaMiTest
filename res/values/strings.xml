@@ -4,5 +4,9 @@
     <string name="app_name">DejaMiTest</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="camera_content">CAMERA\nCONTENT</string>
+    <string name="gallery_content">GALLERY\nCONTENT</string>
+    <string name="login_content">LOGIN\nCONTENT</string>
+    <string name="main_content">MAIN\nCONTENT</string>
 
 </resources>
