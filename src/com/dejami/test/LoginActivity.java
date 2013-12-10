@@ -2,8 +2,13 @@ package com.dejami.test;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 
 /**
  * The login screen for DejaMi test app.
@@ -23,16 +28,54 @@ import android.view.WindowManager;
  */
 
 public class LoginActivity extends Activity {
-
+	
+	EditText mUserIdText;
+	EditText mPasswordText;
+	Button mLoginButton;
+	private static final String PASSWORD = "abc123";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		
 		setContentView(R.layout.activity_login);
-
+		
+		mLoginButton = (Button) findViewById(R.id.login_button);
+		mLoginButton.setOnClickListener(loginTouchListener);
+		mUserIdText = (EditText) findViewById(R.id.user_id_field);
+		mPasswordText = (EditText) findViewById(R.id.password_field);
+	}
+	
+	OnClickListener loginTouchListener = new OnClickListener(){
+		@Override
+		public void onClick(View v) {
+			if(checkLogin()){
+				//proceed to MainActivity with a nice animated transition
+				Log.i("login", "login passed!");
+			}else{
+				Log.i("login", "login failed! try again!");
+			}
+		}
+	};
+	
+	private boolean checkLogin(){
+		//Both fields are required to be non blank too and if one of them is blank,
+		//a popup error should be shown to the user.
+		if(mUserIdText.getEditableText().length()==0 || mPasswordText.getEditableText().length()==0){
+			Log.i("user id / password text", "blank field");
+			//show popup error for blank fields
+			return false;
+		}
+		if(mPasswordText.getEditableText().toString().equals(PASSWORD)){
+			return true;
+		}else{
+			//a popup error should be displayed which the user can dismiss and attempt the login again
+			return false;
+		}
+		
+		//Log.i("user id text", mUserIdText.getEditableText().toString());
+		//Log.i("password text", mPasswordText.getEditableText().toString());
 	}
 	
 }

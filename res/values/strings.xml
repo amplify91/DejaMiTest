@@ -8,5 +8,8 @@
     <string name="gallery_content">GALLERY\nCONTENT</string>
     <string name="login_content">LOGIN\nCONTENT</string>
     <string name="main_content">MAIN\nCONTENT</string>
+    <string name="user_id">User ID</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
 
 </resources>
