@@ -72,9 +72,11 @@ public class LoginActivity extends Activity {
 			Log.i("user id / password text", "blank field");
 			//show popup error for blank fields
 			mUserIdText.setError("User ID is blank. Please enter User ID.");
+			mUserIdText.requestFocus();
 			return false;
 		}else if(mPasswordText.getEditableText().length()==0){
 			mPasswordText.setError("Password is blank. Please enter a password.");
+			mPasswordText.requestFocus();
 			return false;
 		}
 		if(mPasswordText.getEditableText().toString().equals(PASSWORD)){
@@ -83,6 +85,7 @@ public class LoginActivity extends Activity {
 		}else{
 			//a popup error should be displayed which the user can dismiss and attempt the login again
 			mPasswordText.setError("Password is incorrect. Try again.");
+			mPasswordText.requestFocus();
 			return false;
 		}
 		
