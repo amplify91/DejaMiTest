@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.text.method.HideReturnsTransformationMethod;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -41,6 +40,7 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	
+	Intent mCaptureScreen;
 	Intent mGalleryScreen;
 	Button mCaptureButton;
 	Button mGalleryButton;
@@ -55,6 +55,7 @@ public class MainActivity extends Activity {
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_main);
 		
+		mCaptureScreen = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		mGalleryScreen = new Intent(this, GalleryActivity.class);
 		mCaptureButton = (Button) findViewById(R.id.capture_button);
 		mGalleryButton = (Button) findViewById(R.id.gallery_button);
@@ -85,8 +86,7 @@ public class MainActivity extends Activity {
 			//startActivity(mCaptureScreen);
 			if (getApplicationContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)){
 		        // display a native camera control to allow the user to take a snapshot with the camera
-				Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-				startActivityForResult(intent, CAMERA_REQUEST_CODE);
+				startActivityForResult(mCaptureScreen, CAMERA_REQUEST_CODE);
 		    } else {
 		        // allow the user to select a photo from the device
 		    	startActivity(mGalleryScreen);
