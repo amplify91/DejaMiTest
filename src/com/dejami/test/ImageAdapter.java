@@ -6,8 +6,6 @@ import java.util.List;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
@@ -15,12 +13,15 @@ public class ImageAdapter extends BaseAdapter{
 	
 	Context mContext;
 	ImageView mPlaceHolder = null;
-	static List<ImageView> mGalleryImages = new ArrayList<ImageView>();
+	private static List<ImageView> mGalleryImages = new ArrayList<ImageView>();
 	
-	public ImageAdapter(Context context) {
-		super(); //TODO make sure this second argument works. It might break the layout.
-		mContext = context;
+	public ImageAdapter() {
+		super();
 		populateList();
+	}
+	
+	public List<ImageView> getImageList(){
+		return mGalleryImages;
 	}
 	
 	private void populateList(){
@@ -43,6 +44,10 @@ public class ImageAdapter extends BaseAdapter{
 		if(mPlaceHolder!=null){
 			mGalleryImages.set(0, newImage);
 		}
+	}
+	
+	public void addImage(ImageView image){
+		mGalleryImages.add(image);
 	}
 	
 	@Override

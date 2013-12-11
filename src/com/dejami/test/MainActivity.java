@@ -3,8 +3,12 @@ package com.dejami.test;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.hardware.Camera;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -12,6 +16,7 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 /**
@@ -47,7 +52,8 @@ public class MainActivity extends Activity {
 	Button mGalleryButton;
 	
 	Camera mCamera;
-	private static final int CAMERA_REQUEST_CODE = 99;
+	protected static final int CAMERA_REQUEST_CODE = 99;
+	protected static final int RESULT_LOAD_IMAGE = 98;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +75,13 @@ public class MainActivity extends Activity {
 	    if (requestCode == CAMERA_REQUEST_CODE) {
 	        if (resultCode == RESULT_OK) {
 	        	GalleryActivity.setPlaceHolder((Bitmap) data.getExtras().get("data"));
-	        	//TODO Start background thread to resize correct image.
+				//TODO Start background thread to resize correct image.
+	        	new ResizeImageTask().execute((Bitmap) data.getExtras().get("data"));
+	        	/**Note: the correct way to do this would not be to resize this bitmap.
+	        	*	Instead, the image from the camera should be saved to a specified file
+	        	*	and then manipulated properly.
+	        	*	See: http://developer.android.com/training/camera/photobasics.html#TaskScalePhoto
+	        	*/
 	        	startActivity(mGalleryScreen);
 	            // Image captured and saved to fileUri specified in the Intent
 	            Toast.makeText(this, "Image saved to:\n" +
@@ -77,8 +89,23 @@ public class MainActivity extends Activity {
 	        } else if (resultCode == RESULT_CANCELED) {
 	            // User cancelled the image capture
 	        } else {
-	            // Image capture failed, advise user
-	        	//TODO allow the user to select a photo from the device
+	        	Intent i = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+		    	startActivityForResult(i, RESULT_LOAD_IMAGE);
+	        }
+	    }else if(requestCode == RESULT_LOAD_IMAGE){
+	    	if (resultCode == RESULT_OK && data != null) {
+	            Uri selectedImage = data.getData();
+	            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+	            Cursor cursor = getContentResolver().query(selectedImage,filePathColumn, null, null, null);
+	            cursor.moveToFirst();
+	            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+	            String picturePath = cursor.getString(columnIndex);
+	            cursor.close();
+	            ImageView imageView = new ImageView(getApplicationContext());
+	            imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+	            GalleryActivity.addImage(imageView);
+	            
+	            startActivity(mGalleryScreen);
 	        }
 	    }
 	}
@@ -91,10 +118,8 @@ public class MainActivity extends Activity {
 		        // display a native camera control to allow the user to take a snapshot with the camera
 				startActivityForResult(mCaptureScreen, CAMERA_REQUEST_CODE);
 		    } else {
-		        //TODO allow the user to select a photo from the device
-		    	//startactivityforresult(native gallery app).getData();
-		    	//mGalleryScreen.setData(^)
-		    	startActivity(mGalleryScreen);
+		    	Intent i = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+		    	startActivityForResult(i, RESULT_LOAD_IMAGE);
 		    }
 		}
 	};
@@ -102,8 +127,37 @@ public class MainActivity extends Activity {
 	OnClickListener galleryTouchListener = new OnClickListener(){
 		@Override
 		public void onClick(View v) {
-			startActivity(mGalleryScreen);
+			if(GalleryActivity.isEmpty()){
+				Intent i = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+		    	startActivityForResult(i, RESULT_LOAD_IMAGE);
+			}else{
+				startActivity(mGalleryScreen);
+			}
 		}
 	};
+	
+	
+	private class ResizeImageTask extends AsyncTask<Bitmap, Void, ImageView> {
+		
+		ImageView newImage;
+		
+		@Override
+		protected ImageView doInBackground(Bitmap... params) {
+			int h1 = params[0].getHeight();
+			int w1 = params[0].getWidth();
+			int h2;
+			int w2 = 640;
+			h2 = (w2/w1)*h1;
+			newImage = new ImageView(getApplicationContext());
+			newImage.setImageBitmap(Bitmap.createScaledBitmap(params[0], 640, h2, false));
+			return newImage;
+		}
+		
+		@Override
+		protected void onPostExecute(ImageView image) {
+			GalleryActivity.replacePlaceHolder(image);
+		}
+		
+	}
 	
 }

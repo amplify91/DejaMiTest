@@ -37,7 +37,7 @@ public class GalleryActivity extends Activity {
 	static ImageView mPlaceHolder;
 	private static boolean usePlaceholder = false;
 	ListView mContent;
-	ImageAdapter mAdapter;
+	static ImageAdapter mAdapter = new ImageAdapter();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +51,6 @@ public class GalleryActivity extends Activity {
 		
 		mPlaceHolder = new ImageView(this);
 		mContent = (ListView) findViewById(R.id.content);
-		mAdapter = new ImageAdapter(this);
 		
 	}
 	
@@ -78,6 +77,22 @@ public class GalleryActivity extends Activity {
 			usePlaceholder = true;
 			mPlaceHolderBitmap = bm;
 		}
+	}
+	
+	public static void replacePlaceHolder(ImageView newImage){
+		mAdapter.replacePlaceHolder(newImage);
+	}
+	
+	public static boolean isEmpty(){
+		if(mAdapter.getImageList().size()==0){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	public static void addImage(ImageView image){
+		mAdapter.addImage(image);
 	}
 	
 }
