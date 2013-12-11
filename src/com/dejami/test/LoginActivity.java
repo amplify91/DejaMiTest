@@ -1,6 +1,7 @@
 package com.dejami.test;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -32,6 +33,7 @@ public class LoginActivity extends Activity {
 	EditText mUserIdText;
 	EditText mPasswordText;
 	Button mLoginButton;
+	Intent mNextScreen;
 	private static final String PASSWORD = "abc123";
 	
 	@Override
@@ -45,6 +47,7 @@ public class LoginActivity extends Activity {
 		mLoginButton.setOnClickListener(loginTouchListener);
 		mUserIdText = (EditText) findViewById(R.id.user_id_field);
 		mPasswordText = (EditText) findViewById(R.id.password_field);
+		mNextScreen = new Intent(this, MainActivity.class);
 	}
 	
 	OnClickListener loginTouchListener = new OnClickListener(){
@@ -52,8 +55,11 @@ public class LoginActivity extends Activity {
 		public void onClick(View v) {
 			if(checkLogin()){
 				//proceed to MainActivity with a nice animated transition
-				Log.i("login", "login passed!");
+				startActivity(mNextScreen);
+				// TODO A successful login should also be remembered so that the user doesn’t
+				//have to login again if the app is forcefully quit and re-launched again.
 			}else{
+				//allow the user to try again
 				Log.i("login", "login failed! try again!");
 			}
 		}
@@ -62,15 +68,21 @@ public class LoginActivity extends Activity {
 	private boolean checkLogin(){
 		//Both fields are required to be non blank too and if one of them is blank,
 		//a popup error should be shown to the user.
-		if(mUserIdText.getEditableText().length()==0 || mPasswordText.getEditableText().length()==0){
+		if(mUserIdText.getEditableText().length()==0){
 			Log.i("user id / password text", "blank field");
 			//show popup error for blank fields
+			mUserIdText.setError("User ID is blank. Please enter User ID.");
+			return false;
+		}else if(mPasswordText.getEditableText().length()==0){
+			mPasswordText.setError("Password is blank. Please enter a password.");
 			return false;
 		}
 		if(mPasswordText.getEditableText().toString().equals(PASSWORD)){
+			Log.i("login", "login passed!");
 			return true;
 		}else{
 			//a popup error should be displayed which the user can dismiss and attempt the login again
+			mPasswordText.setError("Password is incorrect. Try again.");
 			return false;
 		}
 		

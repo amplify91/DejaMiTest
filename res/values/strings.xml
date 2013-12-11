@@ -11,5 +11,7 @@
     <string name="user_id">User ID</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
+    <string name="capture_button">Capture</string>
+    <string name="gallery_button">Gallery</string>
 
 </resources>

@@ -1,9 +1,13 @@
 package com.dejami.test;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 
 /**
  * The main navigation screen for DejaMi test app.
@@ -17,13 +21,39 @@ import android.view.WindowManager;
  */
 
 public class MainActivity extends Activity {
-
+	
+	Intent mCaptureScreen;
+	Intent mGalleryScreen;
+	Button mCaptureButton;
+	Button mGalleryButton;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_main);
+		
+		mCaptureScreen = new Intent(this, CameraActivity.class);
+		mGalleryScreen = new Intent(this, GalleryActivity.class);
+		mCaptureButton = (Button) findViewById(R.id.capture_button);
+		mGalleryButton = (Button) findViewById(R.id.gallery_button);
+		mCaptureButton.setOnClickListener(captureTouchListener);
+		mGalleryButton.setOnClickListener(galleryTouchListener);
 	}
+	
+	OnClickListener captureTouchListener = new OnClickListener(){
+		@Override
+		public void onClick(View v) {
+			startActivity(mCaptureScreen);
+		}
+	};
+	
+	OnClickListener galleryTouchListener = new OnClickListener(){
+		@Override
+		public void onClick(View v) {
+			startActivity(mGalleryScreen);
+		}
+	};
 	
 }
