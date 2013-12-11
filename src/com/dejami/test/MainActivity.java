@@ -3,6 +3,7 @@ package com.dejami.test;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -67,7 +68,8 @@ public class MainActivity extends Activity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 	    if (requestCode == CAMERA_REQUEST_CODE) {
 	        if (resultCode == RESULT_OK) {
-	        	//finish();
+	        	GalleryActivity.setPlaceHolder((Bitmap) data.getExtras().get("data"));
+	        	//TODO Start background thread to resize correct image.
 	        	startActivity(mGalleryScreen);
 	            // Image captured and saved to fileUri specified in the Intent
 	            Toast.makeText(this, "Image saved to:\n" +
@@ -76,6 +78,7 @@ public class MainActivity extends Activity {
 	            // User cancelled the image capture
 	        } else {
 	            // Image capture failed, advise user
+	        	//TODO allow the user to select a photo from the device
 	        }
 	    }
 	}
@@ -88,7 +91,9 @@ public class MainActivity extends Activity {
 		        // display a native camera control to allow the user to take a snapshot with the camera
 				startActivityForResult(mCaptureScreen, CAMERA_REQUEST_CODE);
 		    } else {
-		        // allow the user to select a photo from the device
+		        //TODO allow the user to select a photo from the device
+		    	//startactivityforresult(native gallery app).getData();
+		    	//mGalleryScreen.setData(^)
 		    	startActivity(mGalleryScreen);
 		    }
 		}

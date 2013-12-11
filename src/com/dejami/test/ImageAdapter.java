@@ -1,52 +1,70 @@
 package com.dejami.test;
 
-import java.security.spec.MGF1ParameterSpec;
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
-public class ImageAdapter extends ArrayAdapter<ImageView>{
-	
+public class ImageAdapter extends BaseAdapter{
 	
 	Context mContext;
-	static List<ImageView> mGalleryImages = null;
+	ImageView mPlaceHolder = null;
+	static List<ImageView> mGalleryImages = new ArrayList<ImageView>();
 	
 	public ImageAdapter(Context context) {
-		super(context, R.layout.gallery_image, getGalleryImages()); //TODO make sure this second argument works. It might break the layout.
+		super(); //TODO make sure this second argument works. It might break the layout.
 		mContext = context;
+		populateList();
 	}
 	
-	private static List<ImageView> getGalleryImages(){
-		//get the images from memory as a List
-		return mGalleryImages;
+	private void populateList(){
+		
+		if(mPlaceHolder!=null){
+			mGalleryImages.add(0, mPlaceHolder);
+		}
+		
+		//TODO find the pictures we have already taken
+		//add them to the list as ImageViews
+		
+	}
+	
+	public void setPlaceHolder(ImageView placeHolder){
+		mPlaceHolder = placeHolder;
+		populateList();
+	}
+	
+	public void replacePlaceHolder(ImageView newImage){
+		if(mPlaceHolder!=null){
+			mGalleryImages.set(0, newImage);
+		}
 	}
 	
 	@Override
 	public int getCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		return mGalleryImages.size();
 	}
 
 	@Override
 	public ImageView getItem(int position) {
-		// TODO Auto-generated method stub
-		return null;
+		return mGalleryImages.get(position);
 	}
 
 	@Override
 	public long getItemId(int position) {
-		// TODO Auto-generated method stub
-		return 0;
+		return mGalleryImages.get(position).getId();
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO return the images we want
-		return null;
+		
+		return getItem(position);
 	}
 
 }

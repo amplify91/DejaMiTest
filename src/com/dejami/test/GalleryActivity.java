@@ -1,6 +1,7 @@
 package com.dejami.test;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
@@ -32,8 +33,11 @@ public class GalleryActivity extends Activity {
 	
 	float mHeight;
 	float mWidth;
-	ImageView mPlaceHolder;
+	static Bitmap mPlaceHolderBitmap;
+	static ImageView mPlaceHolder;
+	private static boolean usePlaceholder = false;
 	ListView mContent;
+	ImageAdapter mAdapter;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +49,35 @@ public class GalleryActivity extends Activity {
 		mHeight = getResources().getDisplayMetrics().heightPixels;
 		mWidth = getResources().getDisplayMetrics().widthPixels;
 		
-		mPlaceHolder = (ImageView) findViewById(R.id.placeholder);
-		mPlaceHolder.setImageResource(R.drawable.ic_launcher);
-		//mPlaceHolder.setVisibility(ImageView.GONE);
+		mPlaceHolder = new ImageView(this);
 		mContent = (ListView) findViewById(R.id.content);
-		mContent.setAdapter(new ImageAdapter(this));
+		mAdapter = new ImageAdapter(this);
+		
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		if(usePlaceholder==true){
+			mPlaceHolder.setImageBitmap(mPlaceHolderBitmap);
+			mAdapter.setPlaceHolder(mPlaceHolder);
+		}
+		mContent.setAdapter(mAdapter);
+	}
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+		usePlaceholder = false;
+	}
+	
+	public static void setPlaceHolder(Bitmap bm){
+		//mPlaceHolder.setImageBitmap((Bitmap) getIntent().getExtras().get("data"));
+		
+		if(bm!=null){
+			usePlaceholder = true;
+			mPlaceHolderBitmap = bm;
+		}
 	}
 	
 }
