@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.ListView;
 
 /**
  * The gallery screen for DejaMi test app.
@@ -27,13 +29,27 @@ import android.view.WindowManager;
  */
 
 public class GalleryActivity extends Activity {
-
+	
+	float mHeight;
+	float mWidth;
+	ImageView mPlaceHolder;
+	ListView mContent;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_gallery);
+		
+		mHeight = getResources().getDisplayMetrics().heightPixels;
+		mWidth = getResources().getDisplayMetrics().widthPixels;
+		
+		mPlaceHolder = (ImageView) findViewById(R.id.placeholder);
+		mPlaceHolder.setImageResource(R.drawable.ic_launcher);
+		//mPlaceHolder.setVisibility(ImageView.GONE);
+		mContent = (ListView) findViewById(R.id.content);
+		mContent.setAdapter(new ImageAdapter(this));
 	}
 	
 }

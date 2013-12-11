@@ -67,7 +67,7 @@ public class MainActivity extends Activity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 	    if (requestCode == CAMERA_REQUEST_CODE) {
 	        if (resultCode == RESULT_OK) {
-	        	
+	        	//finish();
 	        	startActivity(mGalleryScreen);
 	            // Image captured and saved to fileUri specified in the Intent
 	            Toast.makeText(this, "Image saved to:\n" +

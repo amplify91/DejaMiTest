@@ -13,5 +13,6 @@
     <string name="login">Login</string>
     <string name="capture_button">Capture</string>
     <string name="gallery_button">Gallery</string>
+    <string name="gallery_image_description">Gallery Image</string>
 
 </resources>
